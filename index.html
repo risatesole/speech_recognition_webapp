@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload WAV File</title>
+</head>
+<body>
+    <h1>Upload WAV File</h1>
+    <form id="uploadForm" enctype="multipart/form-data">
+        <input type="file" id="audioFile" name="audio" accept=".wav" required>
+        <button type="submit">Upload</button>
+    </form>
+
+    <div id="response">
+        <!-- Transcription or error message will appear here -->
+    </div>
+
+    <script>
+        document.getElementById('uploadForm').addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const fileInput = document.getElementById('audioFile');
+            const responseDiv = document.getElementById('response');
+
+            if (!fileInput.files.length) {
+                responseDiv.innerHTML = "<p style='color: red;'>Please select a file</p>";
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('audio', fileInput.files[0]);
+
+            try {
+                const response = await fetch('http://127.0.0.1:8000/transcribe', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+
+                if (result.transcribed_text) {
+                    responseDiv.innerHTML = `<p>Transcription: ${result.transcribed_text}</p>`;
+                } else if (result.error) {
+                    responseDiv.innerHTML = `<p style='color: red;'>Error: ${result.error}</p>`;
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                responseDiv.innerHTML = "<p style='color: red;'>An error occurred while uploading the file.</p>";
+            }
+        });
+    </script>
+</body>
+</html>
