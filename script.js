@@ -158,7 +158,7 @@ function writeString(view, offset, string) {
 
 async function llm_answer(prompt) { // prompt is the transcribed text
     const apiResponse = await fetch(`http://localhost:8000/get_answer?key=myapikey`, {
-        method: 'POST',  // Changed to POST method
+        method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
@@ -171,13 +171,14 @@ async function llm_answer(prompt) { // prompt is the transcribed text
                 }
             ]
         }),
-        mode: 'cors'  // Ensure CORS is included
+        mode: 'cors' // Ensure CORS is included
     });
 
-    const apiResult = await apiResponse.json();
-    if (apiResult.answer) {
-        console.log(apiResult.answer); // Log the answer from the model
-    } else {
-        console.log("Error: No answer returned"); // Log if no answer is returned
+    try {
+        const apiResult = await apiResponse.json();
+        console.log('Full Response:', apiResult); // Log everything
+        return apiResult; // Return the full response if needed elsewhere
+    } catch (error) {
+        console.error('Error parsing JSON:', error);
     }
 }
