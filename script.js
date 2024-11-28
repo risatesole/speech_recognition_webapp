@@ -56,6 +56,7 @@ document.getElementById('uploadForm').addEventListener('submit', async (event) =
 
         if (result.transcribed_text) {
             responseDiv.innerHTML = `<p>Transcription: ${result.transcribed_text}</p>`;
+            llm_answer(result.transcribed_text);  
         } else if (result.error) {
             responseDiv.innerHTML = `<p style='color: red;'>Error: ${result.error}</p>`;
         }
@@ -152,5 +153,31 @@ function interleave(channelData) {
 function writeString(view, offset, string) {
     for (let i = 0; i < string.length; i++) {
         view.setUint8(offset + i, string.charCodeAt(i));
+    }
+}
+
+async function llm_answer(prompt) { // prompt is the transcribed text
+    const apiResponse = await fetch(`http://localhost:8000/get_answer?key=myapikey`, {
+        method: 'POST',  // Changed to POST method
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            "contents": [
+                {
+                    "parts": [
+                        { "text": prompt }
+                    ]
+                }
+            ]
+        }),
+        mode: 'cors'  // Ensure CORS is included
+    });
+
+    const apiResult = await apiResponse.json();
+    if (apiResult.answer) {
+        console.log(apiResult.answer); // Log the answer from the model
+    } else {
+        console.log("Error: No answer returned"); // Log if no answer is returned
     }
 }
