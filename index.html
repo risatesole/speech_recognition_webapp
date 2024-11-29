@@ -3,18 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Record and Upload WAV</title>
+    <title>Banco Cien - Record and Transcribe</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 0;
+        }
+        h1 {
+            color: #2c3e50;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 10px 0;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+        }
+        #talkButton {
+            background-color: #3498db;
+            color: white;
+        }
+        #uploadButton {
+            background-color: #2ecc71;
+            color: white;
+        }
+        #response {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        #response p {
+            margin: 0;
+        }
+    </style>
 </head>
 <body>
-    <h1>Record and Upload WAV</h1>
-    <button id="startRecord">Start Recording</button>
-    <button id="stopRecord" disabled>Stop Recording</button>
+
+    <h1>Banco Cien</h1>
+    <button id="talkButton">Talk</button>
+    
     <form id="uploadForm">
-        <button type="submit" id="uploadButton" disabled>Upload</button>
+        <button type="submit" id="uploadButton">Upload</button>
     </form>
 
     <div id="response">
         <!-- Transcription or error message will appear here -->
+    </div>
+    <div id="ai_talking">
+        
     </div>
 
     <script src="./script.js"></script>
